@@ -86,7 +86,7 @@ class User extends Authenticatable
 
     public function getMenusAttribute()
     {
-        return $this->role->menus()->where('show_menu', 1)->with('children')->where('parent_id')->orderBy('menu_order', 'ASC')->get();
+        return $this->role->menus()->with('children')->where('parent_id')->orderBy('menu_order', 'ASC')->get();
     }
 
     public function getMenuIdAttribute()
