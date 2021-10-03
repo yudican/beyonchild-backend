@@ -141,7 +141,8 @@
                             </a>
                             <div class="collapse" id="colapse-{{$menu->id}}">
                                 <ul class="nav nav-collapse">
-                                    @foreach ($menu->children()->where('show_menu', 1)->get() as $children)
+                                    @foreach ($menu->children()->where('show_menu', 1)->whereIn('id',
+                                    Auth::user()->menu_id)->get() as $children)
                                     <li class="{{request()->routeIs($children->menu_route) ? 'active' : ''}}">
                                         <a href="{{route($children->menu_route)}}">
                                             <span>{{$children->menu_label}}</span>
