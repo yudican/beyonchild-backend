@@ -9,7 +9,7 @@
                                     class="fas fa-arrow-left mr-3 text-capitalize"></i>{{$category->category_name}}</span>
                         </a>
                         <div class="pull-right">
-                            @if (auth()->user()->hasTeamPermission($curteam, request()->segment(1).':create'))
+                            @if (auth()->user()->hasTeamPermission($curteam, request()->route()->getName().':create'))
                             @if (!$form && !$modal)
                             <button class="btn btn-danger btn-sm" wire:click="toggleForm(false)"><i
                                     class="fas fa-times"></i> Cancel</button>

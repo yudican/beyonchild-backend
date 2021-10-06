@@ -32,7 +32,7 @@ class IntelligenceQuestionTable extends LivewireDatatable
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->segment(1)
+                    'segment' => request()->route()->getName()
                 ]);
             })->label(__('Aksi')),
         ];

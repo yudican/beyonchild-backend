@@ -18,7 +18,7 @@ class MentorTable extends LivewireDatatable
 
     public function builder()
     {
-        return Mentor::query();
+        return Mentor::query()->where('school_id', $this->params);
     }
 
     public function columns()
@@ -39,7 +39,7 @@ class MentorTable extends LivewireDatatable
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->segment(1)
+                    'segment' => request()->route()->getName()
                 ]);
             })->label(__('Aksi')),
         ];

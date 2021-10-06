@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\School\LevelResource;
+use App\Http\Resources\School\SchoolResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MentorResource extends JsonResource
@@ -27,6 +28,8 @@ class MentorResource extends JsonResource
             'mentor_description' => $this->mentor_description,
             'profile_image' => $this->user->profile_photo_url,
             'level' => new LevelResource($this->level),
+            'school' => new SchoolResource($this->school),
+            'schedules' => ExpertScheduleResource::collection($this->schedules)
         ];
     }
 }

@@ -14,6 +14,9 @@ use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Master\EducationLevel;
 use App\Http\Livewire\Master\Facility;
 use App\Http\Livewire\Master\SchoolLocation;
+use App\Http\Livewire\School\MentorSchedule;
+use App\Http\Livewire\School\SchoolCuriculumn;
+use App\Http\Livewire\School\SchoolExtracurricular;
 use App\Http\Livewire\Settings\Menu;
 use App\Http\Livewire\UserManagement\Permission;
 use App\Http\Livewire\UserManagement\PermissionRole;
@@ -71,4 +74,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'user.authorization']
     // events
     Route::get('/event-category', EventCategory::class)->name('event-category');
     Route::get('/event', Event::class)->name('event');
+
+    // school
+    Route::get('/school-curriculumn', SchoolCuriculumn::class)->name('school-curriculumn');
+    Route::get('/school-extra', SchoolExtracurricular::class)->name('school-extra');
+    Route::get('/mentor-schedule', MentorSchedule::class)->name('mentor-schedule');
 });

@@ -4,8 +4,12 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\EducationLevel;
 use App\Models\Facility;
+use App\Models\Role;
 use App\Models\School as ModelsSchool;
 use App\Models\SchoolLocation;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
@@ -54,70 +58,98 @@ class School extends Component
     public function store()
     {
         $this->_validate();
-        $school_image = $this->school_image_path->store('upload', 'public');
-        $data = [
-            'school_name'  => $this->school_name,
-            'school_image'  => $school_image,
-            'school_description'  => $this->school_description,
-            'school_teacher_count'  => $this->school_teacher_count,
-            'school_address'  => $this->school_address,
-            'school_map_address'  => $this->school_map_address,
-            'school_phone_number'  => $this->school_phone_number,
-            'school_email'  => $this->school_email,
-            'school_fee_monthly'  => $this->school_fee_monthly,
-            'school_accreditation'  => $this->school_accreditation,
-            'school_day_start'  => $this->school_day_start,
-            'school_day_end'  => $this->school_day_end,
-            'school_day_open'  => $this->school_day_open,
-            'school_day_close'  => $this->school_day_close,
-            'school_location_id'  => $this->school_location_id,
-            'education_level_id'  => $this->education_level_id
-        ];
+        try {
+            DB::beginTransaction();
 
-        $school = ModelsSchool::create($data);
-        $school->facilities()->attach($this->facility_id);
+            $role = Role::where('role_type', 'school')->first();
+            $user = User::create([
+                'name' => $this->school_name,
+                'email' => $this->school_email,
+                'password' => Hash::make('school123#'),
+                'current_team_id' => 1,
+            ]);
+            $school_image = $this->school_image_path->store('upload', 'public');
+            $data = [
+                'school_name'  => $this->school_name,
+                'school_image'  => $school_image,
+                'school_description'  => $this->school_description,
+                'school_teacher_count'  => $this->school_teacher_count,
+                'school_address'  => $this->school_address,
+                'school_map_address'  => $this->school_map_address,
+                'school_phone_number'  => $this->school_phone_number,
+                'school_email'  => $this->school_email,
+                'school_fee_monthly'  => $this->school_fee_monthly,
+                'school_accreditation'  => $this->school_accreditation,
+                'school_day_start'  => $this->school_day_start,
+                'school_day_end'  => $this->school_day_end,
+                'school_day_open'  => $this->school_day_open,
+                'school_day_close'  => $this->school_day_close,
+                'school_location_id'  => $this->school_location_id,
+                'education_level_id'  => $this->education_level_id,
+                'user_id'  => $user->id,
+            ];
+            $user->roles()->attach($role->id);
+            $user->teams()->attach(1, ['role' => $role->role_type]);
+            $school = ModelsSchool::create($data);
+            $school->facilities()->attach($this->facility_id);
 
-        $this->_reset();
-        return $this->emit('showAlert', ['msg' => 'Data Berhasil Disimpan']);
+            DB::commit();
+            $this->_reset();
+            return $this->emit('showAlert', ['msg' => 'Data Berhasil Disimpan']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $this->emit('showAlertError', ['msg' => 'Data Gagal Disimpan.']);
+        }
     }
 
     public function update()
     {
         $this->_validate();
+        try {
+            DB::beginTransaction();
+            $data = [
+                'school_name'  => $this->school_name,
+                'school_image'  => $this->school_image,
+                'school_description'  => $this->school_description,
+                'school_teacher_count'  => $this->school_teacher_count,
+                'school_address'  => $this->school_address,
+                'school_map_address'  => $this->school_map_address,
+                'school_phone_number'  => $this->school_phone_number,
+                'school_email'  => $this->school_email,
+                'school_fee_monthly'  => $this->school_fee_monthly,
+                'school_accreditation'  => $this->school_accreditation,
+                'school_day_start'  => $this->school_day_start,
+                'school_day_end'  => $this->school_day_end,
+                'school_day_open'  => $this->school_day_open,
+                'school_day_close'  => $this->school_day_close,
+                'school_location_id'  => $this->school_location_id,
+                'education_level_id'  => $this->education_level_id
+            ];
+            $row = ModelsSchool::find($this->school_id);
 
-        $data = [
-            'school_name'  => $this->school_name,
-            'school_image'  => $this->school_image,
-            'school_description'  => $this->school_description,
-            'school_teacher_count'  => $this->school_teacher_count,
-            'school_address'  => $this->school_address,
-            'school_map_address'  => $this->school_map_address,
-            'school_phone_number'  => $this->school_phone_number,
-            'school_email'  => $this->school_email,
-            'school_fee_monthly'  => $this->school_fee_monthly,
-            'school_accreditation'  => $this->school_accreditation,
-            'school_day_start'  => $this->school_day_start,
-            'school_day_end'  => $this->school_day_end,
-            'school_day_open'  => $this->school_day_open,
-            'school_day_close'  => $this->school_day_close,
-            'school_location_id'  => $this->school_location_id,
-            'education_level_id'  => $this->education_level_id
-        ];
-        $row = ModelsSchool::find($this->school_id);
+            $row->update($data);
 
-        if ($this->school_image_path) {
-            $school_image = $this->school_image_path->store('upload', 'public');
-            $data = ['school_image' => $school_image];
-            if (Storage::exists('public/' . $this->school_image)) {
-                Storage::delete('public/' . $this->school_image);
+            if ($this->school_image_path) {
+                $school_image = $this->school_image_path->store('upload', 'public');
+                $data = ['school_image' => $school_image];
+                if (Storage::exists('public/' . $this->school_image)) {
+                    Storage::delete('public/' . $this->school_image);
+                }
             }
+
+            $row->update($data);
+            $row->facilities()->sync($this->facility_id);
+            $row->user()->update([
+                'name' => $this->school_name,
+                'email' => $this->school_email,
+            ]);
+            DB::commit();
+            $this->_reset();
+            return $this->emit('showAlert', ['msg' => 'Data Berhasil Diupdate']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $this->emit('showAlertError', ['msg' => 'Data Gagal Diupdate']);
         }
-
-        $row->update($data);
-        $row->facilities()->sync($this->facility_id);
-
-        $this->_reset();
-        return $this->emit('showAlert', ['msg' => 'Data Berhasil Diupdate']);
     }
 
     public function delete()

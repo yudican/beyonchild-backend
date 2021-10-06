@@ -8,7 +8,7 @@
                             <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>mentors</span>
                         </a>
                         <div class="pull-right">
-                            @if (auth()->user()->hasTeamPermission($curteam, request()->segment(1).':create'))
+                            @if (auth()->user()->hasTeamPermission($curteam, request()->route()->getName().':create'))
                             @if (!$form && !$modal)
                             <button class="btn btn-danger btn-sm" wire:click="toggleForm(false)"><i
                                     class="fas fa-times"></i> Cancel</button>
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="col-md-12">
-            <livewire:table.mentor-table />
+            <livewire:table.mentor-table params="{{auth()->user()->school->id}}" />
         </div>
 
         {{-- Modal form --}}

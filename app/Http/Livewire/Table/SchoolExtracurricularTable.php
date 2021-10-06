@@ -11,25 +11,26 @@ use App\Http\Livewire\Table\LivewireDatatable;
 class SchoolExtracurricularTable extends LivewireDatatable
 {
     protected $listeners = ['refreshTable'];
+    public $hideable = 'select';
     public $table_name = 'tbl_school_extracurriculars';
+    public $hide = [];
 
 
     public function builder()
     {
-        return SchoolExtracurricular::where('school_id', $this->params);
+        return SchoolExtracurricular::query();
     }
 
     public function columns()
     {
         $this->hide = HideableColumn::where(['table_name' => $this->table_name, 'user_id' => auth()->user()->id])->pluck('column_name')->toArray();
         return [
-            Column::name('extracurricular_name')->label('Extracurricular name'),
+            Column::name('extracurricular_name')->label('Extracurricular name')->searchable(),
 
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->segment(1),
-                    'confirm' => false
+                    'segment' => $this->params
                 ]);
             })->label(__('Aksi')),
         ];
@@ -37,14 +38,12 @@ class SchoolExtracurricularTable extends LivewireDatatable
 
     public function getDataById($id)
     {
-        $this->emit('getDataChildById', $id);
+        $this->emit('getDataById', $id);
     }
 
     public function getId($id)
     {
-        SchoolExtracurricular::find($id)->delete();
-        $this->emit('showAlert', ['msg' => 'Data Berhasil Dihapus']);
-        $this->refreshTable();
+        $this->emit('getId', $id);
     }
 
     public function refreshTable()

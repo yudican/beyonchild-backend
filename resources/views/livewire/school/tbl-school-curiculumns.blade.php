@@ -5,7 +5,7 @@
                 <div class="card-body">
                     <h4 class="card-title text-capitalize">
                         <a href="{{route('dashboard')}}">
-                            <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>smart categories</span>
+                            <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>tbl school curiculumns</span>
                         </a>
                         <div class="pull-right">
                             @if (auth()->user()->hasTeamPermission($curteam, request()->route()->getName().':create'))
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="col-md-12">
-            <livewire:table.smart-category-table />
+            <livewire:table.school-curiculumn-table params="{{request()->route()->getName()}}" />
         </div>
 
         {{-- Modal form --}}
@@ -35,14 +35,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title text-capitalize" id="my-modal-title">
-                            {{$update_mode ? 'Update' : 'Tambah'}} smart categories</h5>
+                            {{$update_mode ? 'Update' : 'Tambah'}} tbl school curiculumns</h5>
                     </div>
                     <div class="modal-body">
-                        <x-text-field type="text" name="category_name" label="Name" />
-                        <x-textarea type="textarea" name="category_description" label="Description" />
-                        <x-input-photo foto="{{$category_icon}}"
-                            path="{{optional($category_icon_path)->temporaryUrl()}}" name="category_icon_path"
-                            label="Icon" />
+                        <x-text-field type="text" name="curriculumn_name" label="Curriculumn name" />
                     </div>
                     <div class="modal-footer">
 

@@ -37,17 +37,10 @@ class SchoolTable extends LivewireDatatable
             Column::name('location.school_location_name')->label('Location')->searchable(),
             Column::name('level.education_level_name')->label('Level')->searchable(),
 
-            Column::callback(['tbl_schools.id', 'tbl_schools.school_address'], function ($id, $school_address) {
-                return '<button class="btn btn-success btn-sm" wire:click="showModalCuriculumn(' . $id . ')">Curriculumn</button>';
-            })->label(__('Curriculumn')),
-            Column::callback(['tbl_schools.id', 'tbl_schools.school_map_address'], function ($id, $school_map_address) {
-                return '<button class="btn btn-success btn-sm" wire:click="showModalExtra(' . $id . ')">Extracurriculer</button>';
-            })->label(__('Extracurriculer')),
-
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->segment(1)
+                    'segment' => request()->route()->getName()
                 ]);
             })->label(__('Aksi')),
         ];
@@ -61,15 +54,6 @@ class SchoolTable extends LivewireDatatable
     public function getId($id)
     {
         $this->emit('getId', $id);
-    }
-
-    public function showModalCuriculumn($id)
-    {
-        $this->emit('showModalCuriculumn', $id);
-    }
-    public function showModalExtra($id)
-    {
-        $this->emit('showModalExtra', $id);
     }
 
     public function refreshTable()

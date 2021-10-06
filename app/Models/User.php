@@ -111,4 +111,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(Children::class, 'parent_id');
     }
+
+    /**
+     * Get the school associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function school()
+    {
+        return $this->hasOne(School::class);
+    }
+
+    /**
+     * Get the mentor associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function mentor()
+    {
+        return $this->hasOne(Mentor::class);
+    }
 }

@@ -15,7 +15,7 @@ class PermissionRole extends Component
     $this->role_id = $role_id;
     $permission_id = Permission::with('roles')->whereHas('roles', function ($query) use ($role_id) {
       return $query->where('roles.id', $role_id);
-    })->orderBy('created_at', 'DESC')->pluck('permissions.id')->toArray();
+    })->orderBy('created_at', 'ASC')->pluck('permissions.id')->toArray();
     $this->permission_id = $permission_id;
   }
   public function render()
@@ -23,7 +23,7 @@ class PermissionRole extends Component
     // dd($this->permission_id);
     // dd(Permission::with('roles')->get());
     return view('livewire.usermanagement.permission-role', [
-      'items' => Permission::with('roles')->orderBy('created_at', 'DESC')->get()
+      'items' => Permission::with('roles')->orderBy('created_at', 'ASC')->get()
     ]);
   }
 

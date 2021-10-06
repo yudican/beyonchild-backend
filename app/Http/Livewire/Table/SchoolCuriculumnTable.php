@@ -11,26 +11,26 @@ use App\Http\Livewire\Table\LivewireDatatable;
 class SchoolCuriculumnTable extends LivewireDatatable
 {
     protected $listeners = ['refreshTable'];
+    public $hideable = 'select';
     public $table_name = 'tbl_school_curiculumns';
+    public $hide = [];
 
 
     public function builder()
     {
-        // return SchoolCuriculumn::query();
-        return SchoolCuriculumn::where('school_id', $this->params);
+        return SchoolCuriculumn::query();
     }
 
     public function columns()
     {
         $this->hide = HideableColumn::where(['table_name' => $this->table_name, 'user_id' => auth()->user()->id])->pluck('column_name')->toArray();
         return [
-            Column::name('curriculumn_name')->label('Curiculumn name'),
+            Column::name('curriculumn_name')->label('Curriculumn name')->searchable(),
 
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->segment(1),
-                    'confirm' => false
+                    'segment' => $this->params
                 ]);
             })->label(__('Aksi')),
         ];
@@ -38,14 +38,12 @@ class SchoolCuriculumnTable extends LivewireDatatable
 
     public function getDataById($id)
     {
-        $this->emit('getDataChildById', $id);
+        $this->emit('getDataById', $id);
     }
 
     public function getId($id)
     {
-        SchoolCuriculumn::find($id)->delete();
-        $this->emit('showAlert', ['msg' => 'Data Berhasil Dihapus']);
-        $this->refreshTable();
+        $this->emit('getId', $id);
     }
 
     public function refreshTable()

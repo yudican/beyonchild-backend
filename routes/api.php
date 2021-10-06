@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('school/detail/level/{education_level_id?}', [SchollController::class, 'schoolByLevel'])->name('school.by_level');
     Route::get('school/detail/location/{school_location_id?}', [SchollController::class, 'schoolByLocation'])->name('school.by_location');
     Route::post('school/location_and_level', [SchollController::class, 'schoolByLocationAndLevel'])->name('school.location_and_level');
+    Route::post('school/recomendation', [SchollController::class, 'schoolRecomendation'])->name('school.recomendation');
+    Route::get('school/expert/{school_id}', [SchollController::class, 'schoolExperts']);
 
     // quizz
     Route::get('quiz/multiple-intelegence-category', [MasterQuisController::class, 'multipleIntelegenceCategory'])->name('multiple.intelegence-category');
@@ -47,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('mentor', [MentorController::class, 'getMentor']);
     Route::get('mentor/education/{education_level_id?}', [MentorController::class, 'getMentorByEducationLevel']);
     Route::get('mentor/{mentor_id?}', [MentorController::class, 'getMentorDetail']);
+    Route::get('mentor/schedule/{mentor_schedule_id?}', [MentorController::class, 'getMentorSchedule']);
 
     // event
     Route::get('event', [EventController::class, 'getEvent']);

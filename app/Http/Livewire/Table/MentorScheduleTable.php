@@ -3,46 +3,38 @@
 namespace App\Http\Livewire\Table;
 
 use App\Models\HideableColumn;
-use App\Models\Menu;
+use App\Models\MentorSchedule;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use App\Http\Livewire\Table\LivewireDatatable;
 
-class MenuTable extends LivewireDatatable
+class MentorScheduleTable extends LivewireDatatable
 {
     protected $listeners = ['refreshTable'];
     public $hideable = 'select';
-    public $table_name = 'menus';
+    public $table_name = 'tbl_mentor_schedules';
     public $hide = [];
 
 
     public function builder()
     {
-        return Menu::query()->orderBy('menu_order', 'ASC');
+        return MentorSchedule::query()->where('mentor_id', $this->params['mentor_id']);
     }
 
     public function columns()
     {
         $this->hide = HideableColumn::where(['table_name' => $this->table_name, 'user_id' => auth()->user()->id])->pluck('column_name')->toArray();
         return [
-            Column::name('menu_label')->label('Menu Name')->searchable(),
-            Column::name('menu_route')->label('Menu Route')->searchable(),
-            Column::callback(['menu_icon'], function ($menu_icon) {
-                return '<i class="' . $menu_icon . '"></i>';
-            })->label('Menu Icon')->searchable(),
-            Column::name('menu_order')->label('Menu Order')->searchable(),
-            Column::callback(['parent_id'], function ($parent_id) {
-                $menu = Menu::find($parent_id);
-                if ($menu) {
-                    return Menu::find($parent_id)->menu_label;
-                }
-                return '-';
-            })->label('Parent Menu')->searchable(),
+            Column::name('schedule_title')->label('Schedule title')->searchable(),
+            Column::name('schedule_date')->label('Schedule date')->searchable(),
+            Column::name('schedule_time_start')->label('Schedule start')->searchable(),
+            Column::name('schedule_time_end')->label('Schedule end')->searchable(),
+            Column::name('mentor_id')->label('mentor id')->searchable(),
 
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->route()->getName()
+                    'segment' => $this->params['route_name']
                 ]);
             })->label(__('Aksi')),
         ];

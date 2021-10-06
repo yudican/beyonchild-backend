@@ -67,7 +67,8 @@ class Mentor extends Component
                 'mentor_description'  => $this->mentor_description,
                 'mentor_topic_description'  => $this->mentor_topic_description,
                 'user_id'  => $user->id,
-                'education_level_id'  => $this->education_level_id
+                'education_level_id'  => $this->education_level_id,
+                'school_id'  => auth()->user()->school->id,
             ];
 
             $user->roles()->attach($role_mentor->id);
@@ -78,7 +79,7 @@ class Mentor extends Component
             return $this->emit('showAlert', ['msg' => 'Data Berhasil Disimpan']);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $this->emit('showAlertError', ['msg' => 'Data Gagal Disimpan ']);
+            return $this->emit('showAlertError', ['msg' => 'Data Gagal Disimpan ' . $th->getMessage()]);
         }
     }
 
@@ -97,7 +98,7 @@ class Mentor extends Component
                 'mentor_benefit'  => $this->mentor_benefit,
                 'mentor_description'  => $this->mentor_description,
                 'mentor_topic_description'  => $this->mentor_topic_description,
-                'education_level_id'  => $this->education_level_id
+                'education_level_id'  => $this->education_level_id,
             ];
             $row = ModelsMentor::find($this->tbl_mentors_id);
             $row->user()->update([

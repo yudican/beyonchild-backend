@@ -26,12 +26,12 @@ class SdqQuestionTable extends LivewireDatatable
         $this->hide = HideableColumn::where(['table_name' => $this->table_name, 'user_id' => auth()->user()->id])->pluck('column_name')->toArray();
         return [
             Column::name('question_name')->label('Question name')->searchable(),
-Column::name('question_description')->label('Question description')->searchable(),
+            Column::name('question_description')->label('Question description')->searchable(),
 
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
                     'id' => $id,
-                    'segment' => request()->segment(1)
+                    'segment' => request()->route()->getName()
                 ]);
             })->label(__('Aksi')),
         ];

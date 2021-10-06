@@ -6,21 +6,21 @@ use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SchoolCuriculumn extends Model
+class MentorSchedule extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['curriculumn_name', 'school_id'];
+    protected $fillable = ['schedule_title', 'schedule_date', 'schedule_time_start', 'schedule_time_end', 'mentor_id'];
 
     protected $dates = [];
 
     /**
-     * Get the school that owns the SchoolExtracurricular
+     * Get the mentor that owns the MentorSchedule
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function school()
+    public function mentor()
     {
-        return $this->belongsTo(School::class);
+        return $this->belongsTo(Mentor::class);
     }
 }

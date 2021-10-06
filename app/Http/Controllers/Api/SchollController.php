@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\GlobalApiController;
 use App\Http\Resources\FacilityResource;
+use App\Http\Resources\MentorResource;
 use App\Http\Resources\School\LevelResource;
 use App\Http\Resources\School\LocationResource;
 use App\Http\Resources\School\SchoolResource;
@@ -132,6 +133,35 @@ class SchollController extends GlobalApiController
             'status_code' => 200,
             'message' => 'Data fetched successfuly.',
             'data' => SchoolResource::collection($schools)
+        ];
+        return response()->json($respon, 200);
+    }
+
+    public function schoolRecomendation(Request $request)
+    {
+        $facility_id = $request->facility_id;
+        if (empty($facility_id)) return $this->_emptyState();
+        $schools = School::whereHas('facilities', function ($query) use ($facility_id) {
+            $query->whereIn('facility_id', $facility_id);
+        })->orWhere('school_location_id', $request->school_location_id)->orWhere('education_level_id', $request->education_level_id)->get();
+        $respon = [
+            'error' => false,
+            'status_code' => 200,
+            'message' => 'Data fetched successfuly.',
+            'data' => SchoolResource::collection($schools)
+        ];
+        return response()->json($respon, 200);
+    }
+
+    public function schoolExperts($school_id)
+    {
+        $school = School::find($school_id);
+        if (!$school) return $this->_emptyState();
+        $respon = [
+            'error' => false,
+            'status_code' => 200,
+            'message' => 'Data fetched successfuly.',
+            'data' => MentorResource::collection($school->mentors)
         ];
         return response()->json($respon, 200);
     }

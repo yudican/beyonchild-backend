@@ -5,7 +5,7 @@
                 <div class="card-body">
                     <h4 class="card-title text-capitalize">
                         <a href="{{route('dashboard')}}">
-                            <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>smart categories</span>
+                            <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>tbl mentor schedules</span>
                         </a>
                         <div class="pull-right">
                             @if (auth()->user()->hasTeamPermission($curteam, request()->route()->getName().':create'))
@@ -25,7 +25,9 @@
             </div>
         </div>
         <div class="col-md-12">
-            <livewire:table.smart-category-table />
+            @livewire('table.mentor-schedule-table', ['params'=> ['mentor_id' => auth()->user()->mentor->id,
+            'route_name' =>
+            request()->route()->getName()]]))
         </div>
 
         {{-- Modal form --}}
@@ -35,14 +37,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title text-capitalize" id="my-modal-title">
-                            {{$update_mode ? 'Update' : 'Tambah'}} smart categories</h5>
+                            {{$update_mode ? 'Update' : 'Tambah'}} tbl mentor schedules</h5>
                     </div>
                     <div class="modal-body">
-                        <x-text-field type="text" name="category_name" label="Name" />
-                        <x-textarea type="textarea" name="category_description" label="Description" />
-                        <x-input-photo foto="{{$category_icon}}"
-                            path="{{optional($category_icon_path)->temporaryUrl()}}" name="category_icon_path"
-                            label="Icon" />
+                        <x-text-field type="text" name="schedule_title" label="Schedule title" />
+                        <x-text-field type="date" name="schedule_date" label="Schedule date" />
+                        <x-text-field type="time" name="schedule_time_start" label="Schedule start" />
+                        <x-text-field type="time" name="schedule_time_end" label="Schedule end" />
                     </div>
                     <div class="modal-footer">
 

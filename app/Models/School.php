@@ -62,4 +62,24 @@ class School extends Model
     {
         return $this->hasMany(SchoolExtracurricular::class);
     }
+
+    /**
+     * Get the user that owns the Mentor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all of the mentors for the School
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mentors()
+    {
+        return $this->hasMany(Mentor::class);
+    }
 }
