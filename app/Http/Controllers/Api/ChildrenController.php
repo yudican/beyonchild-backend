@@ -74,6 +74,10 @@ class ChildrenController extends GlobalApiController
                 'parent_id' => auth()->user()->id
             ]);
 
+            if (count($request->talents) > 0) {
+                $children->talents()->attach($request->talents);
+            }
+
             DB::commit();
             $respon = [
                 'error' => false,
@@ -153,6 +157,10 @@ class ChildrenController extends GlobalApiController
             }
 
             $children->update($data);
+
+            if (count($request->talents) > 0) {
+                $children->talents()->sync($request->talents);
+            }
 
             DB::commit();
             $respon = [
