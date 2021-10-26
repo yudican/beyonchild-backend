@@ -68,6 +68,9 @@ class ChildrenController extends GlobalApiController
                 'children_photo' => $photo,
                 'children_birth_of_date' => $request->children_birth_of_date,
                 'children_gender' => $request->children_gender,
+                'children_older' => $request->children_older,
+                'children_order' => $request->children_order,
+                'children_school_history' => $request->children_school_history,
                 'parent_id' => auth()->user()->id
             ]);
 
@@ -135,6 +138,9 @@ class ChildrenController extends GlobalApiController
                 'children_name' => $request->children_name,
                 'children_birth_of_date' => $request->children_birth_of_date,
                 'children_gender' => $request->children_gender,
+                'children_older' => $request->children_older,
+                'children_order' => $request->children_order,
+                'children_school_history' => $request->children_school_history,
             ];
 
             $children = Children::find($id);
