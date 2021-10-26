@@ -29,7 +29,7 @@ class ChildrenController extends GlobalApiController
     {
         $validate = Validator::make($request->all(), [
             'children_name' => 'required',
-            'children_photo' => 'required|image',
+            // 'children_photo' => 'required|image',
             'children_birth_of_date' => 'required',
             'children_gender' => 'required',
         ]);
@@ -43,26 +43,27 @@ class ChildrenController extends GlobalApiController
             ];
             return response()->json($respon, 401);
         }
-
-        if (!$request->hasFile('children_photo')) {
-            return response()->json([
-                'error' => true,
-                'message' => 'File not found',
-                'status_code' => 400,
-            ], 400);
-        }
-        $file = $request->file('children_photo');
-        if (!$file->isValid()) {
-            return response()->json([
-                'error' => true,
-                'message' => 'Image file not valid',
-                'status_code' => 400,
-            ], 400);
+        if ($request->children_photo) {
+            if (!$request->hasFile('children_photo')) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'File not found',
+                    'status_code' => 400,
+                ], 400);
+            }
+            $file = $request->file('children_photo');
+            if (!$file->isValid()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Image file not valid',
+                    'status_code' => 400,
+                ], 400);
+            }
         }
 
         try {
             DB::beginTransaction();
-            $photo = $request->children_photo->store('children', 'public');
+            $photo = $request->children_photo ? $request->children_photo->store('children', 'public') : 'upload/user-default.png';
             $children = Children::create([
                 'children_name' => $request->children_name,
                 'children_photo' => $photo,
@@ -91,7 +92,7 @@ class ChildrenController extends GlobalApiController
             $respon = [
                 'error' => true,
                 'status_code' => 400,
-                'message' => 'Data added failed.',
+                'message' => 'Data added failed.' . $th->getMessage(),
                 'data' => []
             ];
             return response()->json($respon, 400);
