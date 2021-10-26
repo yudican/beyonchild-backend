@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChildrenController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\InterestTalentController;
 use App\Http\Controllers\Api\MasterQuisController;
 use App\Http\Controllers\Api\MentorController;
 use App\Http\Controllers\Api\SchollController;
@@ -55,4 +56,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('event', [EventController::class, 'getEvent']);
     Route::get('event/detail/{event_id?}', [EventController::class, 'getEventDetail']);
     Route::get('event/category_event', [EventController::class, 'getEventCategory']);
+
+    // minat & bakat
+    Route::get('minat-bakat', [InterestTalentController::class, 'index']);
 });
