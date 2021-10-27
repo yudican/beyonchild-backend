@@ -21,6 +21,6 @@ class InterestTalent extends Model
      */
     public function childrens()
     {
-        return $this->belongsToMany(Children::class, 'children_talent', 'children_id', 'interest_talent');
+        return $this->belongsToMany(Children::class, 'children_talent', 'children_id', 'interest_talent_id');
     }
 }
