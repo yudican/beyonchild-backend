@@ -23,6 +23,7 @@ class ChildrenResource extends JsonResource
             'older' => $this->children_older,
             'order' => $this->children_order,
             'school_history' => $this->children_school_history,
+            'talents' => InterestTalentResource::collection($this->talents),
         ];
     }
 }
