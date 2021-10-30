@@ -4,15 +4,18 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\InterestTalent as ModelsInterestTalent;
 use Livewire\Component;
-
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
 
 class InterestTalent extends Component
 {
-    
+    use WithFileUploads;
     public $tbl_interest_talent_id;
     public $talent_name;
-    
-   
+    public $image;
+    public $description;
+    public $image_path;
+
 
     public $form_active = false;
     public $form = false;
@@ -31,8 +34,12 @@ class InterestTalent extends Component
     public function store()
     {
         $this->_validate();
-        
-        $data = ['talent_name'  => $this->talent_name];
+        $image = $this->image_path->store('upload', 'public');
+        $data = [
+            'talent_name'  => $this->talent_name,
+            'image'  => $image,
+            'description'  => $this->description
+        ];
 
         ModelsInterestTalent::create($data);
 
@@ -44,10 +51,21 @@ class InterestTalent extends Component
     {
         $this->_validate();
 
-        $data = ['talent_name'  => $this->talent_name];
+        $data = [
+            'talent_name'  => $this->talent_name,
+            'image'  => $this->image,
+            'description'  => $this->description
+        ];
         $row = ModelsInterestTalent::find($this->tbl_interest_talent_id);
 
-        
+
+        if ($this->image_path) {
+            $image = $this->image_path->store('upload', 'public');
+            $data = ['image' => $image];
+            if (Storage::exists('public/' . $this->image)) {
+                Storage::delete('public/' . $this->image);
+            }
+        }
 
         $row->update($data);
 
@@ -66,7 +84,9 @@ class InterestTalent extends Component
     public function _validate()
     {
         $rule = [
-            'talent_name'  => 'required'
+            'talent_name'  => 'required',
+            'image_path'  => 'required',
+            'description'  => 'required'
         ];
 
         return $this->validate($rule);
@@ -77,6 +97,8 @@ class InterestTalent extends Component
         $tbl_interest_talent = ModelsInterestTalent::find($tbl_interest_talent_id);
         $this->tbl_interest_talent_id = $tbl_interest_talent->id;
         $this->talent_name = $tbl_interest_talent->talent_name;
+        $this->image = $tbl_interest_talent->image;
+        $this->description = $tbl_interest_talent->description;
         if ($this->form) {
             $this->form_active = true;
             $this->emit('loadForm');
@@ -110,6 +132,9 @@ class InterestTalent extends Component
         $this->emit('refreshTable');
         $this->tbl_interest_talent_id = null;
         $this->talent_name = null;
+        $this->image = null;
+        $this->image_path = null;
+        $this->description = null;
         $this->form = false;
         $this->form_active = false;
         $this->update_mode = false;

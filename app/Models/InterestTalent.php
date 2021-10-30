@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class InterestTalent extends Model
 {
+    // use Uuid;
     use HasFactory;
 
-    protected $fillable = ['talent_name'];
+    protected $fillable = ['talent_name', 'image', 'description'];
 
     protected $dates = [];
 

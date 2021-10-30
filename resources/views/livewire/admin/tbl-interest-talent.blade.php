@@ -5,20 +5,17 @@
                 <div class="card-body">
                     <h4 class="card-title text-capitalize">
                         <a href="{{route('dashboard')}}">
-                            <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>interest talent</span>
+                            <span><i class="fas fa-arrow-left mr-3 text-capitalize"></i>tbl interest talent</span>
                         </a>
                         <div class="pull-right">
-                            @if (auth()->user()->hasTeamPermission($curteam, request()->route()->getName().':create'))
-                            @if (!$form && !$modal)
-                            <button class="btn btn-danger btn-sm" wire:click="toggleForm(false)"><i
-                                    class="fas fa-times"></i> Cancel</button>
-                            @else
-                            <button class="btn btn-primary btn-sm"
-                                wire:click="{{$modal ? 'showModal' : 'toggleForm(true)'}}"><i class="fas fa-plus"></i>
-                                Add
-                                New</button>
-                            @endif
-                            @endif
+                        @if (auth()->user()->hasTeamPermission($curteam, request()->route()->getName().':create'))
+                        @if (!$form  && !$modal)
+                        <button class="btn btn-danger btn-sm" wire:click="toggleForm(false)"><i class="fas fa-times"></i> Cancel</button>
+                        @else
+                        <button class="btn btn-primary btn-sm" wire:click="{{$modal ? 'showModal' : 'toggleForm(true)'}}"><i class="fas fa-plus"></i> Add
+                            New</button>
+                        @endif
+                        @endif
                         </div>
                     </h4>
                 </div>
@@ -34,25 +31,27 @@
             <div class="modal-dialog" permission="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-capitalize" id="my-modal-title">
-                            {{$update_mode ? 'Update' : 'Tambah'}} interest talent</h5>
+                        <h5 class="modal-title text-capitalize" id="my-modal-title">{{$update_mode ? 'Update' : 'Tambah'}} tbl interest talent</h5>
                     </div>
                     <div class="modal-body">
-                        <x-text-field type="text" name="talent_name" label="Talent Name" />
+                        <x-text-field type="text" name="talent_name" label="Talent name" />
+<x-input-photo foto="{{$image}}" path="{{optional($image_path)->temporaryUrl()}}"
+                            name="image_path"  label="Image" />
+<x-text-field type="text" name="description" label="Short Description" />
                     </div>
                     <div class="modal-footer">
-
-                        <button type="button" wire:click={{$update_mode ? 'update' : 'store'}}
-                            class="btn btn-primary btn-sm"><i class="fa fa-check pr-2"></i>Simpan</button>
-
+                    
+                        <button type="button" wire:click={{$update_mode ? 'update' : 'store'}} class="btn btn-primary btn-sm"><i
+                                class="fa fa-check pr-2"></i>Simpan</button>
+                   
                         <button class="btn btn-danger btn-sm" wire:click='_reset'><i
                                 class="fa fa-times pr-2"></i>Batal</a>
-
+                    
                     </div>
                 </div>
             </div>
         </div>
-
+        
 
         {{-- Modal confirm --}}
         <div id="confirm-modal" wire:ignore.self class="modal fade" tabindex="-1" permission="dialog"
@@ -76,10 +75,10 @@
         </div>
     </div>
     @push('scripts')
-
+    
 
     <script>
-        document.addEventListener('livewire:load', function(e) {
+         document.addEventListener('livewire:load', function(e) {
             window.livewire.on('showModal', (data) => {
                 $('#form-modal').modal('show')
             });

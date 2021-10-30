@@ -25,7 +25,13 @@ class InterestTalentTable extends LivewireDatatable
     {
         $this->hide = HideableColumn::where(['table_name' => $this->table_name, 'user_id' => auth()->user()->id])->pluck('column_name')->toArray();
         return [
-            Column::name('talent_name')->label('Talent Name')->searchable(),
+            Column::name('talent_name')->label('Talent name')->searchable(),
+            Column::callback(['image'], function ($image) {
+                return view('livewire.components.photo', [
+                    'image_url' => asset('storage/' . $image),
+                ]);
+            })->label(__('image')),
+            Column::name('description')->label('Short Description')->searchable(),
 
             Column::callback(['id'], function ($id) {
                 return view('livewire.components.action-button', [
