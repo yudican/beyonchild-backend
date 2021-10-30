@@ -148,7 +148,7 @@
                     </div>
                     <div class="modal-body">
                         @if ($school_id)
-                        @livewire('child.school-curiculumn', ['school_id' => $school_id])
+                        @livewire('school.school-curiculumn', ['school_id' => $school_id])
                         @endif
                     </div>
                     <div class="modal-footer">
@@ -170,7 +170,7 @@
                     </div>
                     <div class="modal-body">
                         @if ($school_id)
-                        @livewire('child.school-extracurricular', ['school_id' => $school_id])
+                        @livewire('school.school-extracurricular', ['school_id' => $school_id])
                         @endif
                     </div>
                     <div class="modal-footer">
