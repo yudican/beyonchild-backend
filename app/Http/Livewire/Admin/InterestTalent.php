@@ -85,7 +85,6 @@ class InterestTalent extends Component
     {
         $rule = [
             'talent_name'  => 'required',
-            'image_path'  => 'required',
             'description'  => 'required'
         ];
 
