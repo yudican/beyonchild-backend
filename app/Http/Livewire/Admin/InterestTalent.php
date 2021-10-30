@@ -53,7 +53,6 @@ class InterestTalent extends Component
 
         $data = [
             'talent_name'  => $this->talent_name,
-            'image'  => $this->image,
             'description'  => $this->description
         ];
         $row = ModelsInterestTalent::find($this->tbl_interest_talent_id);
