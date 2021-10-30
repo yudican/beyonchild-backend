@@ -139,19 +139,15 @@ class SchollController extends GlobalApiController
 
     public function schoolRecomendation(Request $request)
     {
-        if (empty($request->school_price_monthly)) {
-            $schools = School::all();
-            $respon = [
-                'error' => false,
-                'status_code' => 200,
-                'message' => 'Data fetched successfuly.',
-                'data' => SchoolResource::collection($schools)
-            ];
-            return response()->json($respon, 200);
-        }
+        $school_min = School::orderBy('school_fee_monthly', 'ASC')->first();
+        $school_max = School::orderBy('school_fee_monthly', 'DESC')->first();
 
-        $facility_id = $request->facility_id;
-        $schools = School::orWhereBetween('school_fee_monthly', $request->school_price_monthly)->orWhereHas('facilities', function ($query) use ($facility_id) {
+        $price_min = $school_min ? $school_min->school_fee_monthly : 0;
+        $price_max = $school_max ? $school_min->school_fee_monthly : $school_max->school_fee_monthly;
+
+        $facility_id = $request->facility_id ?? [];
+        $school_price_monthly = $request->school_price_monthly ?? [$price_min, $price_max];
+        $schools = School::orWhereBetween('school_fee_monthly', $school_price_monthly)->orWhereHas('facilities', function ($query) use ($facility_id) {
             $query->whereIn('facility_id', $facility_id);
         })->orWhere('school_location_id', $request->school_location_id)->orWhere('education_level_id', $request->education_level_id)->get();
         $respon = [
