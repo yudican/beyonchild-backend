@@ -17,6 +17,8 @@ class InterestTalentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->talent_name,
+            'image' => asset('storage/' . $this->image),
+            'description' => $this->description,
         ];
     }
 }
